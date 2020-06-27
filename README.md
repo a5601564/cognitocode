@@ -3,3 +3,4 @@ Generate Cognito tokens for authentication either using SDK or by invoking lambd
 ## Getting Started
 ### Prerequisites
 aws-java-sdk version 1.11.631
+IAM user access key and secret key with permissions for AmazonCognitoPowerUser
