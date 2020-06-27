@@ -24,6 +24,14 @@ import com.amazonaws.services.iot.AWSIotClientBuilder;
 import com.amazonaws.services.iot.model.AttachPrincipalPolicyRequest;
 import com.amazonaws.util.StringUtils;
 
+/**
+ *
+ * @author Mayur
+ You can use this code to first time login with cognito credentials and then set new password
+ Alternatively, there is User interface given in Cognito where user can change first time password
+ This code helps to get the token id for the Cognito user. The id token is valid for 60 minutes
+ *
+ */
 
 public class CognitoUtils {
 
