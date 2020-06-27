@@ -24,15 +24,21 @@ import com.amazonaws.services.iot.AWSIotClientBuilder;
 import com.amazonaws.services.iot.model.AttachPrincipalPolicyRequest;
 import com.amazonaws.util.StringUtils;
 
-
+/**
+ *
+ * @author Mayur
+ The id token is valid for 60 minutes, post which either the user has to pass the username and password again or the other option is user can pass the username and refresh token.
+ Refresh token can be valid for 3650 days as well
+ *
+ */
 public class RefreshToken {
 
-    private static String clientId = "xxxxxxxxxxxxxxxxxxxxxxxxxx";
-    private static String userPoolId = "ap-south-1_xxxxxx";
+    private static String clientId = "xxxxxxxxxxxxxxxxxxxxxxxxxx"; //Replace your Cognito cliendId
+    private static String userPoolId = "ap-south-1_xxxxxx"; //Replace your userPoolId
 
-    private static String userName = "xxxxxx";
-    private static String userPassword = "xxxxxx";
-    private static String newuserPassword = "xxxxx";
+    private static String userName = "xxxxxx"; //Cognito username
+    private static String userPassword = "xxxxxx"; // Cognito password
+    private static String newuserPassword = "xxxxx"; // Cognito newpassword for reset password
 
 
 
@@ -45,8 +51,8 @@ public class RefreshToken {
 
     public static String getIdToken() {
 
-        System.setProperty("aws.accessKeyId", "xxxxxx");
-        System.setProperty("aws.secretKey", "xxxxxxxx");
+        System.setProperty("aws.accessKeyId", "xxxxxx"); // AWS IAM user acess key
+        System.setProperty("aws.secretKey", "xxxxxxxx"); // AWS IAM user secrete key
 
         AWSCognitoIdentityProvider provider = AWSCognitoIdentityProviderClientBuilder.standard()
                 .withRegion(Regions.AP_SOUTH_1).withCredentials(new SystemPropertiesCredentialsProvider()).build();
