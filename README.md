@@ -7,10 +7,10 @@ There are two options to generate the Cognito id token
 * b. Lambda code
 ## Getting Started
 * For option a you can use any editor and compile and run the Java code
-![Option 1](https://github.com/mayurbhagia/cognitocode/option1.png)
+![Option 1](https://github.com/mayurbhagia/cognitocode/blob/master/option1.png)
 
 * For option b need to create a lambda function in your AWS account
-![Option 2](https://github.com/mayurbhagia/cognitocode/option2.png)
+![Option 2](https://github.com/mayurbhagia/cognitocode/blob/master/option2.png)
 
 ### Prerequisites
 * aws-java-sdk version 1.11.631
