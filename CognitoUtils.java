@@ -25,31 +25,21 @@ import com.amazonaws.services.iot.model.AttachPrincipalPolicyRequest;
 import com.amazonaws.util.StringUtils;
 
 /**
- *
  * @author Mayur
- You can use this code to first time login with cognito credentials and then set new password
- Alternatively, there is User interface given in Cognito where user can change first time password
- This code helps to get the token id for the Cognito user. The id token is valid for 60 minutes
- *
+ * You can use this code to first time login with cognito credentials and then set new password
+ * Alternatively, there is User interface given in Cognito where user can change first time password
+ * This code helps to get the token id for the Cognito user. The id token is valid for 60 minutes
  */
 
 public class CognitoUtils {
 
-    private static String clientId = "xxxxxxxxxxxxxxxxxxxxxxxxxx";
-    private static String userPoolId = "ap-south-1_xxxxxxxxx";
+    private static String clientId = "4j1p4a0i9b8htf1bd27vfn81ci"; //Replace your Cognito cliendId
+    private static String userPoolId = "us-east-2_9AvY8xWN5"; //Replace your userPoolId
 
-    private static String userName = "xxxxx";
-    private static String userPassword = "xxxxxx";
-    private static String newuserPassword = "xxxxxxx";
+    private static String userName = "a5601564"; //Cognito username
+    private static String userPassword = "5601564a"; // Cognito password
+    private static String newuserPassword = "5601564aA"; // Cognito newpassword for reset password
 
-
-
-    public static void main(String args[]) {
-
-        String idToken = getIdToken();
-        System.out.println("idToken : " + idToken);
-        //getAWSCreds(idToken);
-    }
 
     public static String getIdToken() {
 
@@ -59,7 +49,7 @@ public class CognitoUtils {
         AWSCognitoIdentityProvider provider = AWSCognitoIdentityProviderClientBuilder.standard()
                 .withRegion(Regions.AP_SOUTH_1).withCredentials(new SystemPropertiesCredentialsProvider()).build();
         Map<String, String> authParams = new HashMap<>();
-        System.out.println("Provider========>"+provider);
+        System.out.println("Provider========>" + provider);
 
         authParams.put("USERNAME", userName);
         authParams.put("PASSWORD", newuserPassword);
@@ -67,64 +57,55 @@ public class CognitoUtils {
         AdminInitiateAuthRequest adminInitiateAuthRequest = new AdminInitiateAuthRequest().withClientId(clientId)
                 .withUserPoolId(userPoolId).withAuthFlow(AuthFlowType.ADMIN_NO_SRP_AUTH).withAuthParameters(authParams);
 
-        System.out.println("adminInitiateAuthRequest========>"+adminInitiateAuthRequest);
+        System.out.println("adminInitiateAuthRequest========>" + adminInitiateAuthRequest);
         AdminInitiateAuthResult result = provider.adminInitiateAuth(adminInitiateAuthRequest);
 
 
         System.out.println("result.getChallengeName() : =======>" + result);
 
         if (StringUtils.isNullOrEmpty(result.getChallengeName())) {
-            return "ID token is ====>"+
-                    result.getAuthenticationResult().getIdToken() +"\n"+
-                    "Refresh token is ====>"+result.getAuthenticationResult().getRefreshToken();
+            return "ID token is ====>" +
+                    result.getAuthenticationResult().getIdToken() + "\n" +
+                    "Refresh token is ====>" + result.getAuthenticationResult().getRefreshToken();
+        } else {
+            //resetPassword(userName, newuserPassword, result, provider);
+            return "abc";
         }
 
-		 else {
-			//resetPassword(userName, newuserPassword, result, provider);
-            return "abc";
-		}
 
-
-
-
-
-/*
-        Map <String,String> challengeResponses = new HashMap<>();
-  challengeResponses.put("USERNAME" , userName);
-  challengeResponses.put("NEW_PASSWORD", newuserPassword);
-  RespondToAuthChallengeRequest respondToAuthChallengeRequest=new RespondToAuthChallengeRequest()
-          .withChallengeName("NEW_PASSWORD_REQUIRED")
-  .withClientId(clientId) .withChallengeResponses(challengeResponses)
+        Map<String, String> challengeResponses = new HashMap<>();
+        challengeResponses.put("USERNAME", userName);
+        challengeResponses.put("NEW_PASSWORD", newuserPassword);
+        RespondToAuthChallengeRequest respondToAuthChallengeRequest = new RespondToAuthChallengeRequest()
+                .withChallengeName("NEW_PASSWORD_REQUIRED")
+                .withClientId(clientId).withChallengeResponses(challengeResponses)
                 .withSession(result.getSession());
-  provider.respondToAuthChallenge(respondToAuthChallengeRequest);
-  return "abc";
-*/
+        provider.respondToAuthChallenge(respondToAuthChallengeRequest);
+        return "abc";
 
 
     }
-/*
-	private static void resetPassword(String username, String newPassword, AdminInitiateAuthResult result,
-			AWSCognitoIdentityProvider provider) {
-		Map<String, String> challengeResponses = new HashMap<>();
-		challengeResponses.put("USERNAME", username);
-		challengeResponses.put("NEW_PASSWORD", newPassword);
 
-		RespondToAuthChallengeRequest respondToAuthChallengeRequest = new RespondToAuthChallengeRequest()
-				.withChallengeName("NEW_PASSWORD_REQUIRED").withClientId(clientId)
-				.withChallengeResponses(challengeResponses).withSession(result.getSession());
+    private static void resetPassword(String username, String newPassword, AdminInitiateAuthResult result,
+                                      AWSCognitoIdentityProvider provider) {
+        Map<String, String> challengeResponses = new HashMap<>();
+        challengeResponses.put("USERNAME", username);
+        challengeResponses.put("NEW_PASSWORD", newPassword);
 
-		provider.respondToAuthChallenge(respondToAuthChallengeRequest);
-		System.out.println("passwors reset successfully");
-	}
-	*/
+        RespondToAuthChallengeRequest respondToAuthChallengeRequest = new RespondToAuthChallengeRequest()
+                .withChallengeName("NEW_PASSWORD_REQUIRED").withClientId(clientId)
+                .withChallengeResponses(challengeResponses).withSession(result.getSession());
+
+        provider.respondToAuthChallenge(respondToAuthChallengeRequest);
+        System.out.println("passwors reset successfully");
+    }
 
 
-/*
     public static Map<String, Object> getAWSCreds(String idToken) {
         GetIdRequest idRequest = new GetIdRequest();
         idRequest.setIdentityPoolId(identityPoolId);
 
-        Map<String,String> providerTokens = new HashMap<>();
+        Map<String, String> providerTokens = new HashMap<>();
         providerTokens.put(providerName, idToken);
         idRequest.setLogins(providerTokens);
         System.out.println("providerTokens : " + providerTokens);
@@ -156,6 +137,10 @@ public class CognitoUtils {
 
     }
 
-*/
 
+    public static void main(String args[]) {
+        String idToken = getIdToken();
+        System.out.println("idToken : " + idToken);
+        //getAWSCreds(idToken);
+    }
 }

@@ -33,13 +33,12 @@ import com.amazonaws.util.StringUtils;
  */
 public class RefreshToken {
 
-    private static String clientId = "xxxxxxxxxxxxxxxxxxxxxxxxxx"; //Replace your Cognito cliendId
-    private static String userPoolId = "ap-south-1_xxxxxx"; //Replace your userPoolId
+    private static String clientId = "4j1p4a0i9b8htf1bd27vfn81ci"; //Replace your Cognito cliendId
+    private static String userPoolId = "us-east-2_9AvY8xWN5"; //Replace your userPoolId
 
-    private static String userName = "xxxxxx"; //Cognito username
-    private static String userPassword = "xxxxxx"; // Cognito password
-    private static String newuserPassword = "xxxxx"; // Cognito newpassword for reset password
-
+    private static String userName = "a5601564"; //Cognito username
+    private static String userPassword = "5601564a"; // Cognito password
+    private static String newuserPassword = "5601564aA"; // Cognito newpassword for reset password
 
 
     public static void main(String args[]) {
@@ -82,11 +81,5 @@ public class RefreshToken {
             //resetPassword(userName, newuserPassword, result, provider);
             return "abc";
         }
-
-
-
-
-
-}
 
 }
