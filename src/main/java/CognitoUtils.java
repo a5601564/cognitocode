@@ -33,26 +33,26 @@ import com.amazonaws.util.StringUtils;
 
 public class CognitoUtils {
 
-    private static String clientId = "4j1p4a0i9b8htf1bd27vfn81ci"; //Replace your Cognito cliendId
-    private static String userPoolId = "us-east-2_9AvY8xWN5"; //Replace your userPoolId
+    private static String clientId = "bfc98j7vko39hjabguvrdtkbl"; //Replace your Cognito cliendId
+    private static String userPoolId = "us-west-2_rEy5meTRO"; //Replace your userPoolId
 
     private static String userName = "a5601564"; //Cognito username
-    private static String userPassword = "5601564a"; // Cognito password
-    private static String newuserPassword = "5601564aA"; // Cognito newpassword for reset password
+    private static String userPassword = "5601564aA."; // Cognito password
+    private static String newuserPassword = "5601564aA.a"; // Cognito newpassword for reset password
 
 
     public static String getIdToken() {
 
-        System.setProperty("aws.accessKeyId", "xxxxx");
-        System.setProperty("aws.secretKey", "xxxxx");
+        System.setProperty("aws.accessKeyId", "AKIAJVVIFAURUT7GA66A");
+        System.setProperty("aws.secretKey", "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");
 
         AWSCognitoIdentityProvider provider = AWSCognitoIdentityProviderClientBuilder.standard()
-                .withRegion(Regions.AP_SOUTH_1).withCredentials(new SystemPropertiesCredentialsProvider()).build();
+                .withRegion(Regions.US_WEST_2).withCredentials(new SystemPropertiesCredentialsProvider()).build();
         Map<String, String> authParams = new HashMap<>();
         System.out.println("Provider========>" + provider);
 
         authParams.put("USERNAME", userName);
-        authParams.put("PASSWORD", newuserPassword);
+        authParams.put("PASSWORD", userPassword);
 
         AdminInitiateAuthRequest adminInitiateAuthRequest = new AdminInitiateAuthRequest().withClientId(clientId)
                 .withUserPoolId(userPoolId).withAuthFlow(AuthFlowType.ADMIN_NO_SRP_AUTH).withAuthParameters(authParams);
@@ -68,20 +68,20 @@ public class CognitoUtils {
                     result.getAuthenticationResult().getIdToken() + "\n" +
                     "Refresh token is ====>" + result.getAuthenticationResult().getRefreshToken();
         } else {
-            //resetPassword(userName, newuserPassword, result, provider);
+            resetPassword(userName, newuserPassword, result, provider);
             return "abc";
         }
 
 
-        Map<String, String> challengeResponses = new HashMap<>();
-        challengeResponses.put("USERNAME", userName);
-        challengeResponses.put("NEW_PASSWORD", newuserPassword);
-        RespondToAuthChallengeRequest respondToAuthChallengeRequest = new RespondToAuthChallengeRequest()
-                .withChallengeName("NEW_PASSWORD_REQUIRED")
-                .withClientId(clientId).withChallengeResponses(challengeResponses)
-                .withSession(result.getSession());
-        provider.respondToAuthChallenge(respondToAuthChallengeRequest);
-        return "abc";
+//        Map<String, String> challengeResponses = new HashMap<>();
+//        challengeResponses.put("USERNAME", userName);
+//        challengeResponses.put("NEW_PASSWORD", newuserPassword);
+//        RespondToAuthChallengeRequest respondToAuthChallengeRequest = new RespondToAuthChallengeRequest()
+//                .withChallengeName("NEW_PASSWORD_REQUIRED")
+//                .withClientId(clientId).withChallengeResponses(challengeResponses)
+//                .withSession(result.getSession());
+//        provider.respondToAuthChallenge(respondToAuthChallengeRequest);
+//        return "abc";
 
 
     }
@@ -101,41 +101,41 @@ public class CognitoUtils {
     }
 
 
-    public static Map<String, Object> getAWSCreds(String idToken) {
-        GetIdRequest idRequest = new GetIdRequest();
-        idRequest.setIdentityPoolId(identityPoolId);
-
-        Map<String, String> providerTokens = new HashMap<>();
-        providerTokens.put(providerName, idToken);
-        idRequest.setLogins(providerTokens);
-        System.out.println("providerTokens : " + providerTokens);
-
-        AmazonCognitoIdentity amazonCognitoIdentity = AmazonCognitoIdentityClientBuilder.standard().withCredentials(new SystemPropertiesCredentialsProvider()).withRegion(Regions.US_EAST_1).build();
-
-        GetIdResult idResp = amazonCognitoIdentity.getId(idRequest);
-
-        System.out.println("Identity: " + idResp.getIdentityId());
-
-        GetCredentialsForIdentityResult credentialsForIdentity = amazonCognitoIdentity
-                .getCredentialsForIdentity(
-                        new GetCredentialsForIdentityRequest()
-                                .withIdentityId(idResp.getIdentityId())
-                                .withLogins(providerTokens));
-
-
-        Credentials credentials = credentialsForIdentity.getCredentials();
-
-        System.out.println("credentials.getAccessKeyId() : " + credentials.getAccessKeyId());
-        System.out.println("credentials.getSecretKey() : " + credentials.getSecretKey());
-        System.out.println("credentials.getSessionToken() : " + credentials.getSessionToken());
-
-
-        Map<String, Object> results = new HashMap<>();
-        results.put("indetityId", idResp.getIdentityId());
-        results.put("credentials", credentials);
-        return results;
-
-    }
+//    public static Map<String, Object> getAWSCreds(String idToken) {
+//        GetIdRequest idRequest = new GetIdRequest();
+//        idRequest.setIdentityPoolId(identityPoolId);
+//
+//        Map<String, String> providerTokens = new HashMap<>();
+//        providerTokens.put(providerName, idToken);
+//        idRequest.setLogins(providerTokens);
+//        System.out.println("providerTokens : " + providerTokens);
+//
+//        AmazonCognitoIdentity amazonCognitoIdentity = AmazonCognitoIdentityClientBuilder.standard().withCredentials(new SystemPropertiesCredentialsProvider()).withRegion(Regions.US_EAST_1).build();
+//
+//        GetIdResult idResp = amazonCognitoIdentity.getId(idRequest);
+//
+//        System.out.println("Identity: " + idResp.getIdentityId());
+//
+//        GetCredentialsForIdentityResult credentialsForIdentity = amazonCognitoIdentity
+//                .getCredentialsForIdentity(
+//                        new GetCredentialsForIdentityRequest()
+//                                .withIdentityId(idResp.getIdentityId())
+//                                .withLogins(providerTokens));
+//
+//
+//        Credentials credentials = credentialsForIdentity.getCredentials();
+//
+//        System.out.println("credentials.getAccessKeyId() : " + credentials.getAccessKeyId());
+//        System.out.println("credentials.getSecretKey() : " + credentials.getSecretKey());
+//        System.out.println("credentials.getSessionToken() : " + credentials.getSessionToken());
+//
+//
+//        Map<String, Object> results = new HashMap<>();
+//        results.put("indetityId", idResp.getIdentityId());
+//        results.put("credentials", credentials);
+//        return results;
+//
+//    }
 
 
     public static void main(String args[]) {

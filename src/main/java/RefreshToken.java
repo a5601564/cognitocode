@@ -50,13 +50,13 @@ public class RefreshToken {
 
     public static String getIdToken() {
 
-        System.setProperty("aws.accessKeyId", "xxxxxx"); // AWS IAM user acess key
-        System.setProperty("aws.secretKey", "xxxxxxxx"); // AWS IAM user secrete key
+        System.setProperty("aws.accessKeyId", "AKIAJVVIFAURUT7GA66A");
+        System.setProperty("aws.secretKey", "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");
 
         AWSCognitoIdentityProvider provider = AWSCognitoIdentityProviderClientBuilder.standard()
                 .withRegion(Regions.AP_SOUTH_1).withCredentials(new SystemPropertiesCredentialsProvider()).build();
         Map<String, String> authParams = new HashMap<>();
-        System.out.println("Provider========>"+provider);
+        System.out.println("Provider========>" + provider);
 
         authParams.put("USERNAME", userName);
         authParams.put("PASSWORD", newuserPassword);
@@ -65,21 +65,19 @@ public class RefreshToken {
         AdminInitiateAuthRequest adminInitiateAuthRequest = new AdminInitiateAuthRequest().withClientId(clientId)
                 .withUserPoolId(userPoolId).withAuthFlow(AuthFlowType.REFRESH_TOKEN_AUTH).withAuthParameters(authParams);
 
-        System.out.println("adminInitiateAuthRequest========>"+adminInitiateAuthRequest);
+        System.out.println("adminInitiateAuthRequest========>" + adminInitiateAuthRequest);
         AdminInitiateAuthResult result = provider.adminInitiateAuth(adminInitiateAuthRequest);
 
 
         System.out.println("result.getChallengeName() : =======>" + result);
 
         if (StringUtils.isNullOrEmpty(result.getChallengeName())) {
-            return "ID token is ====>"+
-                    result.getAuthenticationResult().getIdToken() +"\n"+
-                    "Refresh token is ====>"+result.getAuthenticationResult().getRefreshToken();
-        }
-
-        else {
+            return "ID token is ====>" +
+                    result.getAuthenticationResult().getIdToken() + "\n" +
+                    "Refresh token is ====>" + result.getAuthenticationResult().getRefreshToken();
+        } else {
             //resetPassword(userName, newuserPassword, result, provider);
             return "abc";
         }
-
+    }
 }
